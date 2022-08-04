@@ -1,5 +1,7 @@
 # emoji: output emojis on the cli
 
+Of note: the actual script doesn't really do much, but it is an excellent example of how you can write tools that chain other tools together to make your life easier.
+
 ## Usage:
 
 Each command line argument will search for an emoji.
