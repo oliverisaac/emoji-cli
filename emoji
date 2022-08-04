@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+function main(){
+    help_regex='(-h|--help)'
+    if [[ ${1:-} =~ $help_regex ]]; then
+        help
+        exit 1
+    fi
+
+    ready=true
+    if ! which emoji-fzf &>/dev/null; then
+        >&2 echo "You must install emoji-fzf (from github.com/noahp/emoji-fzf ): pip install emoji-fzf"
+        ready=false
+    fi
+
+    if ! which fzf &>/dev/null; then
+        >&2 echo "You must install fzf (from github.com/junegunn/fzf ): brew install fzf"
+        ready=false
+    fi
+
+    if ! $ready; then
+        >&2 echo "Missing requirements"
+        exit 1
+    fi
+
+    for search in "${@}"; do
+        emoji-fzf preview --prepend | fzf -i --select-1 --multi -q "$search" | awk '{print $1}'
+    done | tr -d '\n'
+}
+
+function help(){
+cat <<'EOF'
+
+emoji: output emojis on the cli
+
+Each command line argument will search for an emoji.
+
+For example:
+
+$ emoji apple peach # Will search first for apple, then for peach
+
+$ emoji "apple fruit" # Search for "apple fruit"
+
+# Use it in your git commit:
+$ git commit -a -m "$( emoji rocket ): bumping version to v1"
+
+EOF
+}
+
+main "${@}"
