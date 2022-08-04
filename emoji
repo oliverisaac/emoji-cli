@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 function main(){
     help_regex='(-h|--help)'
     if [[ ${1:-} =~ $help_regex ]]; then
